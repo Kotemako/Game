@@ -1,4 +1,6 @@
 package Game;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,62 +16,78 @@ public class GameTest {
     Player player5 = new Player(5, "Semen", 600);
 
     @Test
-    public void compareStrengthPlayersIfBothAreUnregistered() {
+    void shouldShowResultWhenSecondPlayerIsStronger() {
+        Player player1 = new Player(11, "Petya", 10);
+        Player player2 = new Player(22, "Kolya", 15);
+        Player player3 = new Player(33, "Katya", 10);
+        Player player4 = new Player(44, "Misha", 40);
 
-        assertThrows(RuntimeException.class, () -> {
-            registeredPlayers.round(player2.getName(), player3.getName());
+        Game game = new Game();
+        game.register(player1);
+        game.register(player2);
+        game.register(player3);
+        game.register(player4);
+
+        int expected = 2;
+        int actual = game.round("Petya", "Kolya");
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldShowResultWhenPlayersAreEqual() {
+        Player player1 = new Player(11, "Petya", 10);
+        Player player2 = new Player(22, "Kolya", 15);
+        Player player3 = new Player(33, "Katya", 10);
+        Player player4 = new Player(44, "Misha", 40);
+
+        Game game = new Game();
+        game.register(player1);
+        game.register(player2);
+        game.register(player3);
+        game.register(player4);
+
+        int expected = 0;
+        int actual = game.round("Petya", "Katya");
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldShowException() {
+        Player player1 = new Player(11, "Petya", 10);
+        Player player2 = new Player(22, "Kolya", 15);
+        Player player3 = new Player(33, "Katya", 10);
+        Player player4 = new Player(44, "Misha", 40);
+
+        Game game = new Game();
+        //game.register(player1);
+        game.register(player2);
+        game.register(player3);
+        game.register(player4);
+
+        assertThrows(NotRegisteredException.class, () -> {
+            game.round(player1.getName(), "Unregistered playerName1");
         });
     }
 
     @Test
-    public void compareStrengthPlayersIfOneIsUnregistered() {
-        registeredPlayers.register(player3);
+    void shouldShowException1() {
+        Player player1 = new Player(11, "Petya", 10);
+        Player player2 = new Player(22, "Kolya", 15);
+        Player player3 = new Player(33, "Katya", 10);
+        Player player4 = new Player(44, "Misha", 40);
 
-        assertThrows(RuntimeException.class, () -> {
-            registeredPlayers.round("player3", "player1");
+        Game game = new Game();
+        game.register(player1);
+        game.register(player2);
+        game.register(player3);
+        game.register(player4);
+
+        assertThrows(NotRegisteredException.class, () -> {
+            game.round(player2.getName(), "Unregistered playerName2");
         });
     }
 
-    @Test
-    public void compareStrengthPlayersIfAnotherIsUnregistered() {
-        registeredPlayers.register(player1);
 
-        assertThrows(RuntimeException.class, () -> {
-            registeredPlayers.round("player1", "player2");
-        });
-    }
-
-    @Test
-    public void compareStrengthPlayersIfRegistered() {
-        registeredPlayers.register(player1);
-        registeredPlayers.register(player2);
-
-        assertThrows(RuntimeException.class, () -> {
-            registeredPlayers.round("player1", "player2");
-        });
-    }
-
-    @Test
-    public void comparePlayersWhenFirstIsStrongerThanSecond() {
-        registeredPlayers.register(player1);
-        registeredPlayers.register(player2);
-
-        assertEquals(1, registeredPlayers.round(player1.getName(), player2.getName()));
-    }
-
-    @Test
-    public void comparePlayersWhenFirstIsWeakerThanSecond() {
-        registeredPlayers.register(player4);
-        registeredPlayers.register(player5);
-
-        assertEquals(2, registeredPlayers.round(player4.getName(), player5.getName()));
-    }
-
-    @Test
-    public void comparePlayersOfEqualStrength() {
-        registeredPlayers.register(player1);
-        registeredPlayers.register(player5);
-
-        assertEquals(0, registeredPlayers.round(player1.getName(), player5.getName()));
-    }
 }

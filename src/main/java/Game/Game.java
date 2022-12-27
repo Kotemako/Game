@@ -21,19 +21,19 @@ public class Game {
                 player2 = player;
             }
         }
-            if (player1 == null) {
-                throw new RuntimeException("Игрок 1 не зарегистрирован");
-            }
-            if (player2 == null) {
-                throw new RuntimeException("Игрок 2 не зарегистрирован");
-            }
-            if (player1.getStrength() > player2.getStrength()) {
-                return 1;
-            }
-            if (player1.getStrength() < player2.getStrength()) {
-                return 2;
-            }
-            return 0;
+        if (player1 == null) {
+            throw new RuntimeException("Игрок 1 не зарегистрирован");
         }
+        if (player2 == null) {
+            throw new RuntimeException("Игрок 2 не зарегистрирован");
+        }
+        if (player1.getStrength() > player2.getStrength()) {
+            return 1;
+        }
+        if (player1.getStrength() < player2.getStrength()) {
+            return 2;
+        }
+        return 0;
+    }
 
 }
